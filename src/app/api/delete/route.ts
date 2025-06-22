@@ -1,29 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { unlink } from "fs/promises";
 import { join } from "path";
+import { deleteFile, getFileById } from "@/lib/database";
 
 export async function POST(request: NextRequest) {
 	try {
-		const { filePath } = await request.json();
+		const { fileId } = await request.json();
 
-		if (!filePath) {
+		if (!fileId) {
 			return NextResponse.json(
-				{ error: "No file path provided" },
+				{ error: "No file ID provided" },
 				{ status: 400 }
 			);
 		}
 
-		// Resolve the absolute path to the file
-		const absolutePath = join(process.cwd(), "public", filePath);
+		const file = await getFileById(fileId);
+		if (!file) {
+			return NextResponse.json(
+				{ error: "File not found" },
+				{ status: 404 }
+			);
+		}
 
-		// Delete the file
+		const absolutePath = join(process.cwd(), "public", file.path);
 		await unlink(absolutePath);
+		await deleteFile(fileId);
 
 		return NextResponse.json({ message: "File deleted successfully" });
-	} catch (error) {
-		console.error("Delete error:", error);
+	} catch (error: any) {
+		console.error("Delete error:", error.message);
 		return NextResponse.json(
-			{ error: "Failed to delete file" },
+			{ error: `Failed to delete file: ${error.message}` },
 			{ status: 500 }
 		);
 	}

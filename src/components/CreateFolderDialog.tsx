@@ -11,16 +11,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FolderPlus } from "lucide-react";
-import { generateId } from "@/lib/fileUtils";
-import { addFolder, getCurrentFolder } from "@/lib/sessionStore";
-import { FolderItem } from "@/types";
 import { toast } from "sonner";
 
 interface CreateFolderDialogProps {
+	currentFolderId: string;
 	onFolderCreated: () => void;
 }
 
 export function CreateFolderDialog({
+	currentFolderId,
 	onFolderCreated,
 }: CreateFolderDialogProps) {
 	const [open, setOpen] = useState(false);
@@ -34,24 +33,33 @@ export function CreateFolderDialog({
 		}
 
 		setIsCreating(true);
-		const currentFolder = getCurrentFolder();
 
-		const newFolder: FolderItem = {
-			id: generateId(),
-			name: folderName.trim(),
-			type: "folder",
-			parentId: currentFolder?.id || "root",
-			createdAt: new Date(),
-			children: [],
-		};
+		try {
+			const response = await fetch("/api/folder", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					name: folderName.trim(),
+					parentId: currentFolderId,
+				}),
+				signal: AbortSignal.timeout(10000),
+			});
 
-		addFolder(newFolder);
-		toast.success(`Folder "${folderName}" created successfully`);
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(errorData.error || "Failed to create folder");
+			}
 
-		setFolderName("");
-		setOpen(false);
-		setIsCreating(false);
-		onFolderCreated();
+			toast.success(`Folder "${folderName}" created successfully`);
+			setFolderName("");
+			setOpen(false);
+			onFolderCreated();
+		} catch (error: any) {
+			console.error("Error creating folder:", error.message);
+			toast.error(`Failed to create folder: ${error.message}`);
+		} finally {
+			setIsCreating(false);
+		}
 	};
 
 	return (
@@ -84,7 +92,7 @@ export function CreateFolderDialog({
 							onClick={handleCreate}
 							disabled={!folderName.trim() || isCreating}
 						>
-							Create
+							{isCreating ? "Creating..." : "Create"}
 						</Button>
 					</div>
 				</div>

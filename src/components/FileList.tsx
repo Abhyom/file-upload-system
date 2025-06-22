@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { FileItem } from "@/types";
 import { formatFileSize, getFileIcon } from "@/lib/fileUtils";
-import { deleteFile } from "@/lib/sessionStore";
 import { toast } from "sonner";
 import { Download, Trash2 } from "lucide-react";
 
@@ -37,21 +36,22 @@ export function FileList({ files, onFileDeleted }: FileListProps) {
 			const response = await fetch("/api/delete", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ filePath: fileToDelete.path }),
+				body: JSON.stringify({ fileId: fileToDelete.id }),
+				signal: AbortSignal.timeout(10000),
 			});
 
-			if (response.ok) {
-				deleteFile(fileToDelete.id);
-				toast.success(
-					`File "${fileToDelete.name}" deleted successfully`
-				);
-				onFileDeleted?.();
-			} else {
-				throw new Error("Failed to delete file");
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(errorData.error || `HTTP ${response.status}`);
 			}
-		} catch (error) {
-			console.error("Delete failed:", error);
-			toast.error(`Failed to delete file "${fileToDelete.name}"`);
+
+			toast.success(`File "${fileToDelete.name}" deleted successfully`);
+			onFileDeleted?.();
+		} catch (error: any) {
+			console.error("Delete failed:", error.message);
+			toast.error(
+				`Failed to delete file "${fileToDelete.name}": ${error.message}`
+			);
 		} finally {
 			setDeleteDialogOpen(false);
 			setFileToDelete(null);
