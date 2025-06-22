@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Drive Clone - File Manager",
-	description: "A Google Drive-like file manager built with Next.js",
+	title: "File Upload System",
+	description: "A folder based file uploader built with Next.js",
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>
+			<body className={inter.className} suppressHydrationWarning>
 				{children}
 				<Toaster />
 			</body>

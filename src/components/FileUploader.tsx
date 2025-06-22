@@ -3,16 +3,17 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import { generateId } from "@/lib/fileUtils";
-import { addFile, getCurrentFolder } from "@/lib/sessionStore";
-import { FileItem } from "@/types";
 import { toast } from "sonner";
 
 interface FileUploaderProps {
+	currentFolderId: string;
 	onFileUploaded: () => void;
 }
 
-export function FileUploader({ onFileUploaded }: FileUploaderProps) {
+export function FileUploader({
+	currentFolderId,
+	onFileUploaded,
+}: FileUploaderProps) {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [isUploading, setIsUploading] = useState(false);
 
@@ -20,47 +21,36 @@ export function FileUploader({ onFileUploaded }: FileUploaderProps) {
 		if (!files.length) return;
 
 		setIsUploading(true);
-		const currentFolder = getCurrentFolder();
 		let successCount = 0;
 		let errorCount = 0;
 
 		for (const file of Array.from(files)) {
 			const formData = new FormData();
 			formData.append("file", file);
-			formData.append("folderId", currentFolder?.id || "root");
+			formData.append("folderId", currentFolderId);
 
 			try {
 				const response = await fetch("/api/upload", {
 					method: "POST",
 					body: formData,
+					signal: AbortSignal.timeout(30000),
 				});
 
-				if (response.ok) {
-					const { filePath } = await response.json();
-
-					const fileItem: FileItem = {
-						id: generateId(),
-						name: file.name,
-						type: "file",
-						size: file.size,
-						mimeType: file.type,
-						folderId: currentFolder?.id || "root",
-						createdAt: new Date(),
-						path: filePath,
-					};
-
-					addFile(fileItem);
-					successCount++;
-				} else {
-					errorCount++;
+				if (!response.ok) {
+					const errorData = await response.json();
+					throw new Error(
+						errorData.error || `HTTP ${response.status}`
+					);
 				}
-			} catch (error) {
-				console.error("Upload failed:", error);
+
+				successCount++;
+			} catch (error: any) {
+				console.error("Upload failed:", error.message);
 				errorCount++;
+				toast.error(`Failed to upload ${file.name}: ${error.message}`);
 			}
 		}
 
-		// Show appropriate toast messages
 		if (successCount > 0 && errorCount === 0) {
 			toast.success(
 				`${successCount} file${

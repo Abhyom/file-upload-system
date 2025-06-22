@@ -15,7 +15,7 @@ export interface FolderItem {
 	type: "folder";
 	parentId: string | null;
 	createdAt: Date;
-	children: string[];
+	children?: string[];
 }
 
 export type DriveItem = FileItem | FolderItem;

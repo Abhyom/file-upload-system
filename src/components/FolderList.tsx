@@ -3,19 +3,13 @@
 import { Folder } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { FolderItem } from "@/types";
-import { setCurrentFolder } from "@/lib/sessionStore";
 
 interface FolderListProps {
 	folders: FolderItem[];
-	onNavigate: () => void;
+	onNavigate: (folderId: string) => void;
 }
 
 export function FolderList({ folders, onNavigate }: FolderListProps) {
-	const handleFolderClick = (folderId: string) => {
-		setCurrentFolder(folderId);
-		onNavigate();
-	};
-
 	if (folders.length === 0) return null;
 
 	return (
@@ -24,7 +18,7 @@ export function FolderList({ folders, onNavigate }: FolderListProps) {
 				<Card
 					key={folder.id}
 					className="p-4 hover:shadow-md transition-shadow cursor-pointer"
-					onClick={() => handleFolderClick(folder.id)}
+					onClick={() => onNavigate(folder.id)}
 				>
 					<div className="flex items-center space-x-3">
 						<Folder className="h-8 w-8 text-blue-500" />
