@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# File Upload System
 
-## Getting Started
+A lightweight file manager built with **Next.js**, **Prisma (SQLite)**, and **Tailwind CSS** using **shadcn UI** components.
 
-First, run the development server:
+Users can:
+- Create nested folders
+- Upload, download, and delete files
+- Navigate folder structures
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+All data is stored in `dev.db` (SQLite), and files are saved in `public/uploads`. The application has no authentication as of yet and uses a single root folder (`id: "root"`).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Drag-and-drop file uploads
+- Folder hierarchy and navigation
+- File metadata handling
+- SQLite-backed storage
+- Toast-based error handling
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Application Flow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Entry Point**: The app loads at `/dashboard` and renders the `FileManager` component.
+2. **Initialization**: On first load, `initializeDatabase` (via `/api/files`) creates a root folder (`id: "root"`) in `dev.db` if it doesn’t exist.
+3. **Dashboard Display**: `FileManager` fetches folder contents via `/api/files` for the current folder (default: root).
+4. **Navigation**: Clicking a folder in `FolderList` updates the current `folderId`. `Breadcrumb` fetches the path using `/api/path`.
+5. **Folder Creation**: `CreateFolderDialog` posts to `/api/folder` to add a new folder in `dev.db`.
+6. **File Upload**: `FileUploader` posts to `/api/upload`; files are saved to `public/uploads` and metadata is saved in `dev.db`.
+7. **File Deletion**: `FileList` uses `/api/delete` to remove files from both disk and database.
+8. **File Download**: Direct access through `/uploads/<filename>`.
+9. **Error Handling**: API calls include timeouts and retries (up to 3); errors are shown via toast or inline UI.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## API Routes (`src/app/api`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `delete/route.ts`: POST — deletes a file by `fileId` from disk and DB
+- `files/route.ts`: GET — fetches folders/files (default: `root`)
+- `folder/route.ts`: POST — creates a folder with `name` and `parentId`
+- `path/route.ts`: GET — retrieves folder path for breadcrumbs
+- `upload/route.ts`: POST — handles file uploads (up to 10MB)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## UI Components (`src/components`)
+
+- `Breadcrumb.tsx`: Shows navigable folder path via `/api/path`
+- `FileList.tsx`: Lists files with metadata and actions (download, delete)
+- `FolderList.tsx`: Clickable folder cards
+- `FileUploader.tsx`: Upload interface with toast notifications
+- `CreateFolderDialog.tsx`: Input dialog to add new folders
+- `FileManager.tsx`: Main UI logic, state manager, and layout renderer
+
+---
+
