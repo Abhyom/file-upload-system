@@ -23,7 +23,7 @@ All data is stored in `dev.db` (SQLite), and files are saved in `public/uploads`
 
 ## Application Flow
 
-1. **Entry Point**: The app loads at `/dashboard` and renders the `FileManager` component.
+1. **Entry Point**: The app loads and renders the `FileManager` component.
 2. **Initialization**: On first load, `initializeDatabase` (via `/api/files`) creates a root folder (`id: "root"`) in `dev.db` if it doesn’t exist.
 3. **Dashboard Display**: `FileManager` fetches folder contents via `/api/files` for the current folder (default: root).
 4. **Navigation**: Clicking a folder in `FolderList` updates the current `folderId`. `Breadcrumb` fetches the path using `/api/path`.
