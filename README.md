@@ -2,10 +2,7 @@
 
 A lightweight file manager built with **Next.js**, **Prisma (SQLite)**, and **Tailwind CSS** using **shadcn UI** components.
 
-Users can:
-- Create nested folders
-- Upload, download, and delete files
-- Navigate folder structures
+![image](https://github.com/user-attachments/assets/a6058210-0073-464a-b3a8-7fb0caac0302)
 
 All data is stored in `dev.db` (SQLite), and files are saved in `public/uploads`. The application has no authentication as of yet and uses a single root folder (`id: "root"`).
 
@@ -14,10 +11,61 @@ All data is stored in `dev.db` (SQLite), and files are saved in `public/uploads`
 ## Features
 
 - Drag-and-drop file uploads
+
+  
+
+https://github.com/user-attachments/assets/b3a08da4-a45c-4111-acb8-e4f72fd23a3c
+
+
+
+
+
 - Folder hierarchy and navigation
-- File metadata handling
-- SQLite-backed storage
+
+ 
+
+
+https://github.com/user-attachments/assets/dfa03008-2cde-4681-abe8-412f03c1beb9
+
+
+
+
+- Create nested Folders
+
+   
+
+https://github.com/user-attachments/assets/19a37255-fe7a-45d2-936c-6234cabc56a9
+
+
+
+  
+- Delete previously uploaded files
+
+     
+
+
+https://github.com/user-attachments/assets/5ab55c81-0249-4565-b032-432592293709
+
+
+
+- Download uploaded files
+
+    
+
+https://github.com/user-attachments/assets/9cbdd5e2-cfe1-43ba-87f5-8f3f7c4cec43
+
+
+
+
+-  SQLite-backed storage
+
+  ![image](https://github.com/user-attachments/assets/bde5f550-f4a6-4a10-92c5-0752fafc685a)
+
+
 - Toast-based error handling
+
+  ![image](https://github.com/user-attachments/assets/8bd60b45-445b-4770-bbf6-ba500f87cd91)
+
 
 ---
 
