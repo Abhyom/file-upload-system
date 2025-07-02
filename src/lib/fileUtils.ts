@@ -19,3 +19,8 @@ export function getFileIcon(mimeType: string): string {
 	if (mimeType.includes("zip") || mimeType.includes("rar")) return "📦";
 	return "📄";
 }
+
+export function formatFileType(mimeType: string): string {
+	const parts = mimeType.split("/");
+	return parts[1] || mimeType;
+}
