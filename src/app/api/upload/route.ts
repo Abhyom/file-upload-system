@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 			size: file.size,
 			mimeType: file.type,
 			path: `/uploads/${filename}`,
-			folderId: folderId || "root",
+			folderId: folderId,
 		});
 
 		return NextResponse.json({

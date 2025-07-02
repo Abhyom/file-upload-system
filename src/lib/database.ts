@@ -1,21 +1,27 @@
+// lib/database.ts
 import { prisma } from "./db";
 import { FileItem, FolderItem } from "@/types";
 
 export async function initializeDatabase() {
 	try {
-		const rootFolder = await prisma.folder.findFirst({
+		// Delete any existing "root" folder to avoid conflicts
+		await prisma.folder.deleteMany({
 			where: { id: "root" },
 		});
 
-		if (!rootFolder) {
+		const homeFolder = await prisma.folder.findFirst({
+			where: { id: "home" },
+		});
+
+		if (!homeFolder) {
 			await prisma.folder.create({
 				data: {
-					id: "root",
-					name: "root",
+					id: "home",
+					name: "home",
 					parentId: null,
 				},
 			});
-			console.log("Root folder created");
+			console.log("Home folder created");
 		}
 	} catch (error) {
 		console.error("Error initializing database:", error);
@@ -31,7 +37,7 @@ export async function createFolder(
 		const folder = await prisma.folder.create({
 			data: {
 				name,
-				parentId: parentId === "root" ? "root" : parentId,
+				parentId: parentId === "home" ? "home" : parentId,
 			},
 		});
 
