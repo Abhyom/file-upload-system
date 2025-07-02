@@ -34,7 +34,7 @@ All metadata is stored in `dev.db` (SQLite), and files are saved in `public/uplo
 - Folder hierarchy and navigation - The /root directory features a "home" folder for user actions, navigated via Prisma with an M:M relation for efficient management.
 - Delete previously uploaded files
 - Download uploaded files
--  SQLite-backed storage
+- Metadata of uploaded files stored in SQLite-backed storage
 
   ![image](https://github.com/user-attachments/assets/bde5f550-f4a6-4a10-92c5-0752fafc685a)
 
