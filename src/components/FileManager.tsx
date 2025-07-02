@@ -5,9 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { Separator } from "@/components/ui/separator";
 import { CreateFolderDialog } from "./CreateFolderDialog";
 import { FileUploader, FileUploaderHandle } from "./FileUploader";
-import { FolderList } from "./FolderList";
-import { FolderTable } from "./FolderTable";
-import { FileList } from "./FileList";
+
 import { Breadcrumb } from "./Breadcrumb";
 import { FileItem, FolderItem } from "@/types";
 import { toast } from "sonner";
