@@ -38,7 +38,7 @@ export function FileManager() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [retryCount, setRetryCount] = useState(0);
-	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+	const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 	const fileUploaderRef = useRef<FileUploaderHandle>(null);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [itemToDelete, setItemToDelete] = useState<FileItem | null>(null);
@@ -99,7 +99,7 @@ export function FileManager() {
 	};
 
 	const toggleViewMode = () => {
-		setViewMode(viewMode === "grid" ? "list" : "grid");
+		setViewMode(viewMode === "list" ? "grid" : "list");
 	};
 
 	const handleDelete = async (file: FileItem) => {
@@ -204,12 +204,12 @@ export function FileManager() {
 								item.type === "folder" ? (
 									<Card
 										key={item.id}
-										className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+										className="p-4 hover:shadow-md transition-shadow cursor-pointer border border-gray-400"
 										onClick={() =>
 											handleFolderNavigate(item.id)
 										}
 									>
-										<div className="flex items-center space-x-3">
+										<div className="flex items-center space-x-3 ">
 											<Folder className="h-8 w-8 text-blue-500" />
 											<div className="flex-1 min-w-0">
 												<p className="text-sm font-medium text-gray-900 truncate">
@@ -226,7 +226,7 @@ export function FileManager() {
 								) : (
 									<Card
 										key={item.id}
-										className="p-4 hover:shadow-md transition-shadow"
+										className="p-4 hover:shadow-md transition-shadow "
 									>
 										<div className="flex items-center space-x-3">
 											<div className="text-2xl">
@@ -416,7 +416,7 @@ export function FileManager() {
 							item.type === "folder" ? (
 								<Card
 									key={item.id}
-									className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+									className="p-4 hover:shadow-md transition-shadow cursor-pointer border border-gray-400"
 									onClick={() =>
 										handleFolderNavigate(item.id)
 									}
@@ -438,7 +438,7 @@ export function FileManager() {
 							) : (
 								<Card
 									key={item.id}
-									className="p-4 hover:shadow-md transition-shadow"
+									className="p-4 hover:shadow-md transition-shadow border border-gray-400"
 								>
 									<div className="flex items-center space-x-3">
 										<div className="text-2xl">

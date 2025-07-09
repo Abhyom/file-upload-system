@@ -18,4 +18,14 @@ export interface FolderItem {
 	children?: string[];
 }
 
+export interface FileLogItem {
+	id: string;
+	fileId: string | null;
+	fileName: string;
+	fileSize: number;
+	mimeType: string;
+	action: string;
+	createdAt: Date;
+}
+
 export type DriveItem = FileItem | FolderItem;
