@@ -77,7 +77,6 @@ export function FileManager() {
 		if (currentFolderId) {
 			refreshContents(currentFolderId);
 		} else {
-			// Initially show home folder
 			setFolders([
 				{
 					id: "home",
