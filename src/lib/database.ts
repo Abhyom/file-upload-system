@@ -1,6 +1,5 @@
-// lib/database.ts
 import { prisma } from "./db";
-import { FileItem, FolderItem } from "@/types";
+import { FileItem, FolderItem, FileLogItem } from "@/types";
 
 export async function initializeDatabase() {
 	try {
@@ -66,6 +65,17 @@ export async function createFile(
 				mimeType: fileData.mimeType,
 				path: fileData.path,
 				folderId: fileData.folderId,
+			},
+		});
+
+		// Log file creation
+		await prisma.fileLog.create({
+			data: {
+				fileId: file.id,
+				fileName: file.name,
+				fileSize: file.size,
+				mimeType: file.mimeType,
+				action: "CREATED",
 			},
 		});
 
@@ -158,9 +168,27 @@ export async function getFolderPath(folderId: string): Promise<FolderItem[]> {
 
 export async function deleteFile(fileId: string): Promise<void> {
 	try {
-		await prisma.file.delete({
+		const file = await prisma.file.findUnique({
 			where: { id: fileId },
 		});
+
+		if (file) {
+			// Log file deletion
+			await prisma.fileLog.create({
+				data: {
+					fileId: file.id,
+					fileName: file.name,
+					fileSize: file.size,
+					mimeType: file.mimeType,
+					action: "DELETED",
+					createdAt: new Date(),
+				},
+			});
+
+			await prisma.file.delete({
+				where: { id: fileId },
+			});
+		}
 	} catch (error) {
 		console.error("Error deleting file:", error);
 		throw new Error("Failed to delete file");
@@ -188,5 +216,26 @@ export async function getFileById(fileId: string): Promise<FileItem | null> {
 	} catch (error) {
 		console.error("Error getting file by ID:", error);
 		throw new Error("Failed to get file");
+	}
+}
+
+export async function getFileLogs(): Promise<FileLogItem[]> {
+	try {
+		const logs = await prisma.fileLog.findMany({
+			orderBy: { createdAt: "desc" },
+		});
+
+		return logs.map((log) => ({
+			id: log.id,
+			fileId: log.fileId || "",
+			fileName: log.fileName,
+			fileSize: log.fileSize,
+			mimeType: log.mimeType,
+			action: log.action,
+			createdAt: log.createdAt,
+		}));
+	} catch (error) {
+		console.error("Error getting file logs:", error);
+		throw new Error("Failed to get file logs");
 	}
 }

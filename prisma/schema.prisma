@@ -34,6 +34,22 @@ model File {
   
   // Relations
   folder    Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  
+  logs      FileLog[]
+
   @@map("files")
+}
+
+model FileLog {
+  id           String   @id @default(cuid())
+  fileId       String?
+  fileName     String
+  fileSize     Int
+  mimeType     String
+  action       String   // "CREATED" or "DELETED"
+  createdAt    DateTime @default(now())
+  
+  // Relations
+  file         File?    @relation(fields: [fileId], references: [id])
+
+  @@map("file_logs")
 }

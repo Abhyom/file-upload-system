@@ -104,7 +104,7 @@ export const FileUploader = forwardRef<FileUploaderHandle, FileUploaderProps>(
 		return (
 			<div className="space-y-4">
 				<div
-					className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors"
+					className="border-2 border-dashed border-black rounded-lg p-8 text-center hover:border-gray-400 transition-colors"
 					onDrop={handleDrop}
 					onDragOver={handleDragOver}
 				>
