@@ -83,7 +83,6 @@ export default function Ledger() {
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead>File ID</TableHead>
 								<TableHead>File Name</TableHead>
 								<TableHead>Size</TableHead>
 								<TableHead>Type</TableHead>
@@ -94,7 +93,6 @@ export default function Ledger() {
 						<TableBody>
 							{logs.map((log) => (
 								<TableRow key={log.id}>
-									<TableCell>{log.fileId || "-"}</TableCell>
 									<TableCell>{log.fileName}</TableCell>
 									<TableCell>
 										{formatFileSize(log.fileSize)}
