@@ -1,1 +1,1 @@
-DELETE FROM file_logs WHERE fileId IS NULL;
+-- DELETE FROM file_logs WHERE fileId IS NULL;
