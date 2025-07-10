@@ -65,6 +65,7 @@ export async function createFile(
 				mimeType: fileData.mimeType,
 				path: fileData.path,
 				folderId: fileData.folderId,
+				documentType: fileData.documentType,
 			},
 		});
 
@@ -76,6 +77,7 @@ export async function createFile(
 				fileSize: file.size,
 				mimeType: file.mimeType,
 				action: "CREATED",
+				documentType: file.documentType,
 			},
 		});
 
@@ -88,6 +90,7 @@ export async function createFile(
 			folderId: file.folderId,
 			createdAt: file.createdAt,
 			path: file.path,
+			documentType: file.documentType,
 		};
 	} catch (error) {
 		console.error("Error creating file:", error);
@@ -126,6 +129,7 @@ export async function getFolderContents(folderId: string) {
 				folderId: f.folderId,
 				createdAt: f.createdAt,
 				path: f.path,
+				documentType: f.documentType,
 			})),
 		};
 	} catch (error) {
@@ -182,6 +186,7 @@ export async function deleteFile(fileId: string): Promise<void> {
 					mimeType: file.mimeType,
 					action: "DELETED",
 					createdAt: new Date(),
+					documentType: file.documentType,
 				},
 			});
 
@@ -212,6 +217,7 @@ export async function getFileById(fileId: string): Promise<FileItem | null> {
 			folderId: file.folderId,
 			createdAt: file.createdAt,
 			path: file.path,
+			documentType: file.documentType,
 		};
 	} catch (error) {
 		console.error("Error getting file by ID:", error);
@@ -233,6 +239,7 @@ export async function getFileLogs(): Promise<FileLogItem[]> {
 			mimeType: log.mimeType,
 			action: log.action,
 			createdAt: log.createdAt,
+			documentType: log.documentType,
 		}));
 	} catch (error) {
 		console.error("Error getting file logs:", error);

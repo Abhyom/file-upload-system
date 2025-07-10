@@ -23,18 +23,19 @@ model Folder {
 }
 
 model File {
-  id        String   @id @default(cuid())
-  name      String
-  size      Int
-  mimeType  String
-  path      String
-  folderId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  size         Int
+  mimeType     String
+  path         String
+  folderId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  documentType String?  // New field for document type
   
   // Relations
-  folder    Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  logs      FileLog[]
+  folder       Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  logs         FileLog[]
 
   @@map("files")
 }
@@ -47,6 +48,7 @@ model FileLog {
   mimeType     String
   action       String   // "CREATED" or "DELETED"
   createdAt    DateTime @default(now())
+  documentType String?  // New field for document type
   
   // Relations
   file         File?    @relation(fields: [fileId], references: [id])

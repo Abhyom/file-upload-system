@@ -7,6 +7,7 @@ export interface FileItem {
 	folderId: string;
 	createdAt: Date;
 	path: string;
+	documentType?: string | null; // Added documentType
 }
 
 export interface FolderItem {
@@ -26,6 +27,7 @@ export interface FileLogItem {
 	mimeType: string;
 	action: string;
 	createdAt: Date;
+	documentType?: string | null; // Added documentType
 }
 
 export type DriveItem = FileItem | FolderItem;
