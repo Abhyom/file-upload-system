@@ -1,6 +1,6 @@
 # File Upload System
 
-A lightweight file manager built with **Next.js**, **Prisma (SQLite)**, and **Tailwind CSS** using **shadcn UI** components.
+A lightweight file management platform(file uploader+ ledger) built with **Next.js**, **Prisma (SQLite)**, and **Tailwind CSS** using **shadcn UI** components.
 
 
 
